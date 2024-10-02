@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  test-delve:
+    image: ghcr.io/aardvarkllc/test-delve:0.0.1
+    security_opt:
+      - seccomp:unconfined
+    ports:
+      - "8080:8080"
+      - target: 2345
+        published: 2345
+        mode: host
+    networks:
+      - intranet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [ node.role == manager ]
+
+networks:
+  intranet:
+    name: intranet
+    driver: overlay
