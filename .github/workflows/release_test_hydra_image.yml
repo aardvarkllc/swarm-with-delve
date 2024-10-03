@@ -1,23 +1,23 @@
-name: Release test-delve Image
+name: Release test-hydra Image
 
 on:
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Builds and pushes test-delve image'
+        description: 'Builds and pushes test-hydra image'
   push:
     branches:
       - main
       - alpha
       - beta
     paths:
-      - "services/test-delve/**"
+      - "services/test-hydra/**"
 
 env:
   image-version: 0.0.1
   registry: ghcr.io
   registry-url: ghcr.io/aardvarkllc
-  image-name: test-delve
+  image-name: test-hydra
 
 jobs:
   build-and-publish-images:
@@ -49,7 +49,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       # TODO: ensure -mydebug is removed for production
-      - name: Build and push test-delve image
+      - name: Build and push test-hydra image
         run: >-
-          cd services/test-delve;
+          cd services/test-hydra;
           docker buildx build . -t ${{env.registry-url}}/${{env.image-name}}:${{env.image-version}} -t ${{env.registry-url}}/${{env.image-name}}:latest -f ./Dockerfile --output="type=registry" --platform linux/arm64,linux/amd64
